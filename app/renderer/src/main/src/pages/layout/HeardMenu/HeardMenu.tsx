@@ -9,7 +9,8 @@ import {
     DotsHorizontalIcon,
     SaveIcon,
     SortAscendingIcon,
-    SortDescendingIcon
+    SortDescendingIcon,
+    HomeSvgIcon
 } from "@/assets/newIcon"
 import ReactResizeDetector from "react-resize-detector"
 import {useGetState, useMemoizedFn} from "ahooks"
@@ -162,56 +163,115 @@ const HeardMenu: React.FC<HeardMenuProps> = React.memo((props) => {
         const newKey = key.substring(0, index)
         onRouteMenuSelect(newKey as Route)
     })
+    console.log("routeMenu", routeMenu, subMenuData)
+
+    const goHomePage = () => {}
+
     return (
         <div className={style["heard-menu-body"]}>
+            {isExpand && (
+                <div className={style["heard-menu-home"]} onClick={() => goHomePage()}>
+                    <div className={classNames(style["heard-menu-home-title"], style["heard-menu-item-active"])}>
+                        首页
+                    </div>
+                    <HomeSvgIcon />
+                </div>
+            )}
             <div
-                className={classNames(style["heard-menu"], {
-                    [style["heard-menu-expand"]]: isExpand
+                className={classNames(style["heard-menu-main"], {
+                    [style["heard-menu-main-no-expand"]]: !isExpand
                 })}
             >
-                <ReactResizeDetector
-                    onResize={(w) => {
-                        if (!w) {
-                            return
-                        }
-                        setWidth(w)
-                    }}
-                    handleWidth={true}
-                    handleHeight={true}
-                    refreshMode={"debounce"}
-                    refreshRate={50}
-                />
-                <div className={classNames(style["heard-menu-left"])} ref={menuLeftRef}>
-                    <div className={classNames(style["heard-menu-left-inner"])} ref={menuLeftInnerRef}>
-                        {routeMenu
-                            .filter((ele) => ele.subMenuData && ele.subMenuData?.length > 0)
-                            .map((menuItem, index) => {
-                                return (
-                                    <RouteMenuDataItem
-                                        key={`menuItem-${menuItem.id}`}
-                                        menuItem={menuItem}
-                                        isShow={number > 0 ? number <= index : false}
-                                        onSelect={(r) => onRouteMenuSelect(r.key as Route)}
-                                        isExpand={isExpand}
-                                        setSubMenuData={(menu) => {
-                                            setSubMenuData(menu.subMenuData || [])
-                                            setMenuId(menu.id || "")
-                                        }}
-                                        activeMenuId={menuId}
-                                    />
-                                )
-                            })}
+                {!isExpand && (
+                    <div className={style["heard-menu-home-icon-box"]}>
+                        <div className={style["heard-menu-home-small-icon"]} onClick={() => goHomePage()}>
+                            <HomeSvgIcon />
+                        </div>
                     </div>
-                    {number > 0 && routeMenuDataAfter.length > 0 && (
-                        <>
-                            <CollapseMenu
-                                moreLeft={moreLeft}
-                                menuData={routeMenuDataAfter}
-                                isExpand={isExpand}
-                                onMenuSelect={(key) => onRouteMenuSelect(key as Route)}
-                            />
-                        </>
-                    )}
+                )}
+                <div
+                    className={classNames(style["heard-menu"], {
+                        [style["heard-menu-expand"]]: isExpand,
+                        [style["heard-menu-no-expand"]]: !isExpand
+                    })}
+                >
+                    <ReactResizeDetector
+                        onResize={(w) => {
+                            if (!w) {
+                                return
+                            }
+                            setWidth(w)
+                        }}
+                        handleWidth={true}
+                        handleHeight={true}
+                        refreshMode={"debounce"}
+                        refreshRate={50}
+                    />
+                    <div className={classNames(style["heard-menu-left"])} ref={menuLeftRef}>
+                        <div className={classNames(style["heard-menu-left-inner"])} ref={menuLeftInnerRef}>
+                            {routeMenu
+                                .filter((ele) => ele.subMenuData && ele.subMenuData?.length > 0)
+                                .map((menuItem, index) => {
+                                    return (
+                                        <RouteMenuDataItem
+                                            key={`menuItem-${menuItem.id}`}
+                                            menuItem={menuItem}
+                                            isShow={number > 0 ? number <= index : false}
+                                            onSelect={(r) => onRouteMenuSelect(r.key as Route)}
+                                            isExpand={isExpand}
+                                            setSubMenuData={(menu) => {
+                                                setSubMenuData(menu.subMenuData || [])
+                                                setMenuId(menu.id || "")
+                                            }}
+                                            activeMenuId={menuId}
+                                        />
+                                    )
+                                })}
+                        </div>
+                        {number > 0 && routeMenuDataAfter.length > 0 && (
+                            <>
+                                <CollapseMenu
+                                    moreLeft={moreLeft}
+                                    menuData={routeMenuDataAfter}
+                                    isExpand={isExpand}
+                                    onMenuSelect={(key) => onRouteMenuSelect(key as Route)}
+                                />
+                            </>
+                        )}
+                    </div>
+                    <div className={classNames(style["heard-menu-right"])}>
+                        <YakitButton
+                            type='text'
+                            className={style["heard-menu-theme"]}
+                            onClick={() => onImportShare()}
+                            icon={<SaveIcon />}
+                        >
+                            导入协作资源
+                        </YakitButton>
+                        <YakitButton
+                            type='secondary2'
+                            className={style["heard-menu-grey"]}
+                            onClick={() => onRouteMenuSelect(Route.PayloadManager)}
+                            icon={<MenuPayloadIcon />}
+                        >
+                            Payload
+                        </YakitButton>
+                        <YakitButton
+                            type='secondary2'
+                            className={classNames(style["heard-menu-grey"], style["heard-menu-yak-run"], {
+                                [style["margin-right-0"]]: isExpand
+                            })}
+                            onClick={() => onRouteMenuSelect(Route.YakScript)}
+                            icon={<MenuYakRunnerIcon />}
+                        >
+                            Yak Runner
+                        </YakitButton>
+                        {!isExpand && (
+                            <div className={style["heard-menu-sort"]} onClick={() => onExpand()}>
+                                {!isExpand && <SortDescendingIcon />}
+                            </div>
+                        )}
+                    </div>
                 </div>
                 <div className={classNames(style["heard-menu-right"])}>
                     <YakitButton
