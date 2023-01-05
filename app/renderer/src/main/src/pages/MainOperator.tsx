@@ -158,6 +158,8 @@ export interface MainProp {
     tlsGRPC?: boolean
     addr?: string
     onErrorConfirmed?: () => any
+    firstOpenPage?:PageCache
+    selectItemPage?:Route
 }
 
 export interface MenuItem {
@@ -186,7 +188,7 @@ export interface multipleNodeInfo {
     time?: string
 }
 
-interface PageCache {
+export interface PageCache {
     verbose: string
     route: Route
     singleNode: ReactNode | any
@@ -338,22 +340,23 @@ export const SetUserInfo: React.FC<SetUserInfoProp> = React.memo((props) => {
 })
 
 const Main: React.FC<MainProp> = React.memo((props) => {
-
+    const {firstOpenPage,selectItemPage} = props
     const [loading, setLoading] = useState(false)
     const [menuItems, setMenuItems] = useState<MenuItemGroup[]>([])
     const [routeMenuData, setRouteMenuData] = useState<MenuDataProps[]>(DefaultRouteMenuData)
 
     const [notification, setNotification] = useState("")
 
-    const [pageCache, setPageCache, getPageCache] = useGetState<PageCache[]>([
-        {
-            verbose: "MITM",
-            route: Route.HTTPHacker,
-            singleNode: ContentByRoute(Route.HTTPHacker),
-            multipleNode: []
-        }
-    ])
-    const [currentTabKey, setCurrentTabKey] = useState<Route | string>(Route.HTTPHacker)
+    const [pageCache, setPageCache, getPageCache] = useGetState<PageCache[]>(firstOpenPage?[
+        // {
+        //     verbose: "MITM",
+        //     route: Route.HTTPHacker,
+        //     singleNode: ContentByRoute(Route.HTTPHacker),
+        //     multipleNode: []
+        // }
+        firstOpenPage
+    ]:[])
+    const [currentTabKey, setCurrentTabKey] = useState<Route | string>(firstOpenPage?firstOpenPage.route:Route.HTTPHacker)
 
     // 修改密码弹框
     const [passwordShow, setPasswordShow] = useState<boolean>(false)
@@ -375,6 +378,14 @@ const Main: React.FC<MainProp> = React.memo((props) => {
             ipcRenderer.removeAllListeners("refresh-token")
         }
     }, [])
+
+    useEffect(()=>{
+        if(selectItemPage){
+            goRouterPage(selectItemPage)
+            console.log("ppx")
+        }
+    },[selectItemPage])
+
     // yakit页面关闭是否二次确认提示
     const [winCloseFlag, setWinCloseFlag] = useState<boolean>(true)
     const [winCloseShow, setWinCloseShow] = useState<boolean>(false)

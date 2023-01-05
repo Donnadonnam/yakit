@@ -28,6 +28,7 @@ import {
 import {YakitMenu, YakitMenuItemProps} from "@/components/yakitUI/YakitMenu/YakitMenu"
 import {YakitPopover} from "@/components/yakitUI/YakitPopover/YakitPopover"
 import {YakitButton} from "@/components/yakitUI/YakitButton/YakitButton"
+const {ipcRenderer} = window.require("electron")
 
 export const getScriptIcon = (name: string) => {
     switch (name) {
@@ -165,7 +166,9 @@ const HeardMenu: React.FC<HeardMenuProps> = React.memo((props) => {
     })
     console.log("routeMenu", routeMenu, subMenuData)
 
-    const goHomePage = () => {}
+    const goHomePage = () => {
+        ipcRenderer.send("is-go-home", {isShow:true}) 
+    }
 
     return (
         <div className={style["heard-menu-body"]}>
