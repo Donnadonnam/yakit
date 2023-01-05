@@ -1,6 +1,7 @@
 const {ipcMain} = require("electron")
 const childProcess = require("child_process")
 const path = require("path")
+const fs = require("fs");
 const os = require("os")
 const _sudoPrompt = require("sudo-prompt")
 const {GLOBAL_YAK_SETTING} = require("../state")
@@ -22,6 +23,8 @@ fs.open(engineLog, "a", (err, fd) => {
 
 /** 本地引擎随机端口启动重试次数(防止无限制的随机重试，最大重试次数: 5) */
 let engineCount = 0
+
+let dbFile =  "default-yakit.db"
 
 function isPortAvailable(port) {
     return new Promise((resolve, reject) => {
@@ -59,11 +62,11 @@ function generateWindowsSudoCommand(file, args) {
 /** @name 以管理员权限执行命令 */
 function sudoExec(cmd, opt, callback) {
     if (isWindows) {
-        childProcess.exec(cmd, {maxBuffer: 1000 * 1000 * 1000}, (err, stdout, stderr) => {
+        childProcess.exec(cmd, {maxBuffer: 1000 * 1000 * 1000, env: {"YAK_DEFAULT_DATABASE_NAME": dbFile}}, (err, stdout, stderr) => {
             callback(err)
         })
     } else {
-        _sudoPrompt.exec(cmd, {...opt, env: {YAKIT_HOME: path.join(os.homedir(), "yakit-projects/")}}, callback)
+        _sudoPrompt.exec(cmd, {...opt, env: {YAKIT_HOME: path.join(os.homedir(), "yakit-projects/"),"YAK_DEFAULT_DATABASE_NAME": dbFile}}, callback)
     }
 }
 
@@ -130,6 +133,11 @@ module.exports = (win, callback, getClient, newClient) => {
         }
     })
 
+    ipcMain.handle("callback-process-envs",(e,type)=>{
+        dbFile = type === "enterprise" ?  "company-default-yakit.db" : "default-yakit.db"
+        return""
+    })
+
     // asyncGetRandomPort wrapper
     const asyncGetRandomPort = () => {
         return new Promise((resolve, reject) => {
@@ -176,6 +184,7 @@ module.exports = (win, callback, getClient, newClient) => {
                             {
                                 maxBuffer: 1000 * 1000 * 1000,
                                 stdio: "pipe",
+                                env: {"YAK_DEFAULT_DATABASE_NAME": dbFile}
                             }
                         )
                         subprocess.stdout.on("data", toStdout)
@@ -208,8 +217,8 @@ module.exports = (win, callback, getClient, newClient) => {
 
                     const subprocess = childProcess.spawn(getLocalYaklangEngine(), ["grpc", "--port", `${port}`], {
                         // stdio: ["ignore", "ignore", "ignore"]
-                        detached: true,
-                        stdio: ["ignore", log, log]
+                        stdio: "pipe",
+                        env: {"YAK_DEFAULT_DATABASE_NAME": dbFile}
                     })
                     
                     subprocess.unref()
