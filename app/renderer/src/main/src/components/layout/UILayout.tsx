@@ -34,10 +34,11 @@ import {YaklangEngineWatchDog, YaklangEngineWatchDogCredential} from "@/componen
 import {StringToUint8Array} from "@/utils/str"
 import {EngineLog} from "./EngineLog"
 import {saveAuthInfo} from "@/protected/YakRemoteAuth"
+import { ENTERPRISE_STATUS,getJuageEnvFile } from "@/utils/envfile";
 
 import classnames from "classnames"
 import styles from "./uiLayout.module.scss"
-import { ENTERPRISE_STATUS,getJuageEnvFile } from "@/utils/envfile";
+// 是否为企业版
 const isEnterprise = ENTERPRISE_STATUS.IS_ENTERPRISE_STATUS===getJuageEnvFile()
 const {ipcRenderer} = window.require("electron")
 
