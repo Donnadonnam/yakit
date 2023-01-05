@@ -37,7 +37,8 @@ import {saveAuthInfo} from "@/protected/YakRemoteAuth"
 
 import classnames from "classnames"
 import styles from "./uiLayout.module.scss"
-
+import { ENTERPRISE_STATUS,getJuageEnvFile } from "@/utils/envfile";
+const isEnterprise = ENTERPRISE_STATUS.IS_ENTERPRISE_STATUS===getJuageEnvFile()
 const {ipcRenderer} = window.require("electron")
 
 export interface UILayoutProp {
@@ -1758,7 +1759,7 @@ const DownloadYakit: React.FC<DownloadYakitProps> = React.memo((props) => {
                     if (version.startsWith("v")) version = version.substr(1)
 
                     ipcRenderer
-                        .invoke("download-latest-yakit", version)
+                        .invoke("download-latest-yakit", version,isEnterprise)
                         .then(() => {
                             if (!isBreakRef.current) return
                             success("下载完毕")
