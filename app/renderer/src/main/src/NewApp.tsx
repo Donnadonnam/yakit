@@ -1,4 +1,4 @@
-import {useRef, useEffect, useState, Suspense, lazy} from "react"
+import {useRef, useEffect,useLayoutEffect, useState, Suspense, lazy} from "react"
 // by types
 import {failed} from "./utils/notification"
 import {useHotkeys} from "react-hotkeys-hook"
@@ -94,7 +94,7 @@ function NewApp() {
     const [isJudgeLicense, setJudgeLicense] = useState<boolean>(IsEnterprise)
 
     /** 将渲染进程的环境变量传入主进程 */
-    useEffect(() => {
+    useLayoutEffect(() => {
         ipcRenderer.invoke("callback-process-env", fetchEnv())
         ipcRenderer.invoke("callback-process-envs", fetchEnv())
     }, [])
