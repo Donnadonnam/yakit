@@ -61,7 +61,7 @@ function generateWindowsSudoCommand(file, args) {
 
 /** @name 以管理员权限执行命令 */
 function sudoExec(cmd, opt, callback) {
-    if (isWindows) {
+    if (false) {
         childProcess.exec(cmd, {maxBuffer: 1000 * 1000 * 1000, env: {"YAK_DEFAULT_DATABASE_NAME": dbFile}}, (err, stdout, stderr) => {
             callback(err)
         })
@@ -179,23 +179,37 @@ module.exports = (win, callback, getClient, newClient) => {
                 // 考虑如果管理员权限启动未成功该通过什么方式自启普通权限引擎进程
                 if (sudo) {
                     if (isWindows) {
-                        const subprocess = childProcess.exec(
-                            generateWindowsSudoCommand(getLocalYaklangEngine(), `grpc --port ${port}`),
+                        const cmd = `${getLocalYaklangEngine()} grpc --port ${port}`
+                        sudoExec(
+                            cmd,
                             {
-                                maxBuffer: 1000 * 1000 * 1000,
-                                stdio: "pipe",
-                                env: {"YAK_DEFAULT_DATABASE_NAME": dbFile}
+                                name: `yak grpc port ${port}`
+                            },
+                            function (error, stdout, stderr) {
+                                if(stdout) toStdout(stdout)
+                                if(stderr) toStdout(err)
+                                if (error || stderr) {
+                                    reject(error || stderr)
+                                }
                             }
                         )
-                        subprocess.stdout.on("data", toStdout)
-                        subprocess.stderr.on("data", toStdout)
-                        subprocess.on("error", (err) => {
-                            if (err) reject(err)
-                        })
+                        // const subprocess = childProcess.exec(
+                        //     generateWindowsSudoCommand(getLocalYaklangEngine(), `grpc --port ${port}`),
+                        //     {
+                        //         maxBuffer: 1000 * 1000 * 1000,
+                        //         stdio: "pipe",
+                        //         env: {"YAK_DEFAULT_DATABASE_NAME": dbFile}
+                        //     }
+                        // )
+                        // subprocess.stdout.on("data", toStdout)
+                        // subprocess.stderr.on("data", toStdout)
+                        // subprocess.on("error", (err) => {
+                        //     if (err) reject(err)
+                        // })
 
-                        subprocess.on("close", async (e) => {
-                            if (e) reject(e)
-                        })
+                        // subprocess.on("close", async (e) => {
+                        //     if (e) reject(e)
+                        // })
                     } else {
                         const cmd = `${getLocalYaklangEngine()} grpc --port ${port}`
                         sudoExec(
