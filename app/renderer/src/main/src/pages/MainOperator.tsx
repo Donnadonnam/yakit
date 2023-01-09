@@ -159,6 +159,7 @@ export interface MainProp {
     addr?: string
     onErrorConfirmed?: () => any
     selectItemPage?:Route
+    setSelectItemPage?: (v:any)=> void
     isShowHome?:boolean
 }
 
@@ -340,7 +341,7 @@ export const SetUserInfo: React.FC<SetUserInfoProp> = React.memo((props) => {
 })
 
 const Main: React.FC<MainProp> = React.memo((props) => {
-    const {selectItemPage,isShowHome} = props
+    const {selectItemPage,setSelectItemPage,isShowHome} = props
     const [loading, setLoading] = useState(false)
     const [menuItems, setMenuItems] = useState<MenuItemGroup[]>([])
     const [routeMenuData, setRouteMenuData] = useState<MenuDataProps[]>(DefaultRouteMenuData)
@@ -379,8 +380,9 @@ const Main: React.FC<MainProp> = React.memo((props) => {
     }, [])
 
     useEffect(()=>{
-        if(selectItemPage){
+        if(selectItemPage&&setSelectItemPage){
             goRouterPage(selectItemPage)
+            setSelectItemPage(undefined)
         }
     },[selectItemPage])
 
