@@ -180,6 +180,7 @@ const HeardMenu: React.FC<HeardMenuProps> = React.memo((props) => {
                     <HomeSvgIcon />
                 </div>
             )}
+            <div style={{flex:1}}>
             <div
                 className={classNames(style["heard-menu-main"], {
                     [style["heard-menu-main-no-expand"]]: !isExpand
@@ -276,39 +277,6 @@ const HeardMenu: React.FC<HeardMenuProps> = React.memo((props) => {
                         )}
                     </div>
                 </div>
-                <div className={classNames(style["heard-menu-right"])}>
-                    <YakitButton
-                        type='text'
-                        className={style["heard-menu-theme"]}
-                        onClick={() => onImportShare()}
-                        icon={<SaveIcon />}
-                    >
-                        导入协作资源
-                    </YakitButton>
-                    <YakitButton
-                        type='secondary2'
-                        className={style["heard-menu-grey"]}
-                        onClick={() => onRouteMenuSelect(Route.PayloadManager)}
-                        icon={<MenuPayloadIcon />}
-                    >
-                        Payload
-                    </YakitButton>
-                    <YakitButton
-                        type='secondary2'
-                        className={classNames(style["heard-menu-grey"], style["heard-menu-yak-run"], {
-                            [style["margin-right-0"]]: isExpand
-                        })}
-                        onClick={() => onRouteMenuSelect(Route.YakScript)}
-                        icon={<MenuYakRunnerIcon />}
-                    >
-                        Yak Runner
-                    </YakitButton>
-                    {!isExpand && (
-                        <div className={style["heard-menu-sort"]} onClick={() => onExpand()}>
-                            {!isExpand && <SortDescendingIcon />}
-                        </div>
-                    )}
-                </div>
             </div>
             {isExpand && (
                 <div className={style["heard-sub-menu-expand"]}>
@@ -353,6 +321,7 @@ const HeardMenu: React.FC<HeardMenuProps> = React.memo((props) => {
                     </Tabs>
                 </div>
             )}
+            </div>
         </div>
     )
 })
