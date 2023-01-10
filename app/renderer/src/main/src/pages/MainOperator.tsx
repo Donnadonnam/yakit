@@ -154,6 +154,8 @@ export interface MenuItem {
 export interface MenuItemGroup {
     Group: string
     Items: MenuItem[]
+    MenuSort: number
+    Mode: string
 }
 
 interface PluginMenuItem {
@@ -1203,6 +1205,13 @@ const Main: React.FC<MainProp> = React.memo((props) => {
             />
         )
     }
+    const onRouteMenuSelect = useMemoizedFn((key: string) => {
+        if (!key || key === "undefined") {
+            failed("不存在")
+            return
+        }
+        menuAddPage(key as Route)
+    })
     return (
         <Layout className='yakit-main-layout'>
             <AutoSpin spinning={loading}>
@@ -1410,7 +1419,7 @@ const Main: React.FC<MainProp> = React.memo((props) => {
                         <HeardMenu
                             routeMenuData={(routeMenuData || []).filter((e) => !e.hidden)}
                             menuItemGroup={menuItems}
-                            onRouteMenuSelect={menuAddPage}
+                            onRouteMenuSelect={onRouteMenuSelect}
                         />
                         <Content
                             style={{
