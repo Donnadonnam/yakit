@@ -189,7 +189,7 @@ const HeardMenu: React.FC<HeardMenuProps> = React.memo((props) => {
                 {!isExpand && (
                     <div className={style["heard-menu-home-icon-box"]}>
                         <div className={style["heard-menu-home-small-icon"]} onClick={() => goHomePage()}>
-                            <HomeSvgIcon />
+                            <HomeSvgIcon className={style["heard-menu-icon"]}/>
                         </div>
                     </div>
                 )}
