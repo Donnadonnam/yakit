@@ -164,7 +164,6 @@ const HeardMenu: React.FC<HeardMenuProps> = React.memo((props) => {
         const newKey = key.substring(0, index)
         onRouteMenuSelect(newKey as Route)
     })
-    console.log("routeMenu", routeMenu, subMenuData)
 
     const goHomePage = () => {
         ipcRenderer.send("is-go-home", {isShow:true}) 
