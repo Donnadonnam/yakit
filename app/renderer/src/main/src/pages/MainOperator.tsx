@@ -323,8 +323,6 @@ export const SetUserInfo: React.FC<SetUserInfoProp> = React.memo((props) => {
 
 const Main: React.FC<MainProp> = React.memo((props) => {
     const [loading, setLoading] = useState(false)
-    const [menuItems, setMenuItems] = useState<MenuItemGroup[]>([])
-    // const [routeMenuData, setRouteMenuData] = useState<MenuDataProps[]>(DefaultRouteMenuData)
 
     const [notification, setNotification] = useState("")
 
@@ -367,56 +365,6 @@ const Main: React.FC<MainProp> = React.memo((props) => {
             .then((flag: any) => setWinCloseFlag(flag === undefined ? true : flag))
     }, [])
 
-    // // 获取自定义菜单
-    // const updateMenuItems = () => {
-    //     setLoading(true)
-    //     // Fetch User Defined Plugins
-    //     ipcRenderer
-    //         .invoke("GetAllMenuItem", {})
-    //         .then((data: {Groups: MenuItemGroup[]}) => {
-    //             setMenuItems(data.Groups)
-    //         })
-    //         .catch((e: any) => failed("Update Menu Item Failed"))
-    //         .finally(() => setTimeout(() => setLoading(false), 300))
-    //     // Fetch Official General Plugins
-    //     ipcRenderer
-    //         .invoke("QueryYakScript", {
-    //             Pagination: genDefaultPagination(1000),
-    //             IsGeneralModule: true,
-    //             Type: "yak"
-    //         } as QueryYakScriptRequest)
-    //         .then((data: QueryYakScriptsResponse) => {
-    //             const tabList: MenuDataProps[] = cloneDeep(DefaultRouteMenuData)
-    //             for (let item of tabList) {
-    //                 if (item.subMenuData) {
-    //                     if (item.key === Route.GeneralModule) {
-    //                         const extraMenus: MenuDataProps[] = data.Data.map((i) => {
-    //                             return {
-    //                                 icon: getScriptIcon(i.ScriptName),
-    //                                 hoverIcon: getScriptHoverIcon(i.ScriptName),
-    //                                 key: `plugin:${i.Id}`,
-    //                                 label: i.ScriptName
-    //                             } as unknown as MenuDataProps
-    //                         })
-    //                         item.subMenuData.push(...extraMenus)
-    //                     }
-    //                     item.subMenuData.sort((a, b) => a.label.localeCompare(b.label))
-    //                 }
-    //             }
-    //             setRouteMenuData(tabList)
-    //         })
-    // }
-    // useEffect(() => {
-    //     updateMenuItems()
-    //     ipcRenderer.on("fetch-new-main-menu", (e) => {
-    //         updateMenuItems()
-    //     })
-
-    //     return () => {
-    //         ipcRenderer.removeAllListeners("fetch-new-main-menu")
-    //     }
-    // }, [])
-
     // useEffect(() => {
     //     if (engineStatus === "error") props.onErrorConfirmed && props.onErrorConfirmed()
     // }, [engineStatus])
@@ -424,18 +372,6 @@ const Main: React.FC<MainProp> = React.memo((props) => {
     // 整合路由对应名称
     const pluginKey = (item: PluginMenuItem) => `plugin:${item.Group}:${item.YakScriptId}`
     const routeKeyToLabel = useRef<Map<string, string>>(new Map<string, string>())
-    // routeMenuData.forEach((k) => {
-    //     ;(k.subMenuData || []).forEach((subKey) => {
-    //         routeKeyToLabel.set(`${subKey.key}`, subKey.label)
-    //     })
-
-    //     routeKeyToLabel.set(`${k.key}`, k.label)
-    // })
-    // menuItems.forEach((k) => {
-    //     k.Items.forEach((value) => {
-    //         routeKeyToLabel.set(pluginKey(value), value.Verbose)
-    //     })
-    // })
 
     // Tabs Bar Operation Function
     const getCacheIndex = (route: string) => {
@@ -1420,7 +1356,7 @@ const Main: React.FC<MainProp> = React.memo((props) => {
                     <>
                         <HeardMenu
                             // routeMenuData={(routeMenuData || []).filter((e) => !e.hidden)}
-                            menuItemGroup={menuItems}
+                            // menuItemGroup={menuItems}
                             onRouteMenuSelect={onRouteMenuSelect}
                             setRouteKeyToLabel={(val) => {
                                 val.forEach((value, key) => {
