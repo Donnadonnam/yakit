@@ -2,11 +2,12 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+    position: relative;
 
     .yakit-loading-body {
         width: 100%;
         height: 100%;
-        overflow: hidden;
+        overflow: hidden auto;
         background: #fbe7d9;
 
         .yakit-loading-title {
@@ -31,14 +32,14 @@
 
         .yakit-loading-icon-wrapper {
             margin: 48px auto 0;
-            width: 96px;
-            height: 96px;
+            width: 160px;
+            height: 160px;
             overflow: hidden;
             position: relative;
-            font-size: 96px;
+            font-size: 160px;
             .theme-icon-wrapper {
-                width: 96px;
-                height: 96px;
+                width: 160px;
+                height: 160px;
                 position: absolute;
                 bottom: 0;
                 left: 0;
@@ -49,18 +50,18 @@
                 animation-direction: alternate;
             }
             .theme-icon {
-                width: 96px;
-                height: 96px;
-                line-height: 96px;
+                width: 160px;
+                height: 160px;
+                line-height: 160px;
                 position: absolute;
                 bottom: 0;
                 left: 0;
                 overflow: hidden;
             }
             .white-icon {
-                width: 96px;
-                height: 96px;
-                line-height: 96px;
+                width: 160px;
+                height: 160px;
+                line-height: 160px;
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -74,15 +75,26 @@
             color: #f28b44;
             line-height: 24px;
 
+            .time-wait-title {
+                color: var(--yakit-helper-text-color);
+            }
+            .time-link-title {
+                color: var(--yakit-primary-5);
+            }
             .time-out-title {
                 color: var(--yakit-danger-5);
             }
 
             .engine-log-btn {
-                margin-top: 8px;
+                margin-top: 16px;
                 display: flex;
-                justify-content: center;
-                gap: 8px;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                .btn-style {
+                    width: 280px;
+                    justify-content: center;
+                }
             }
 
             .switch-engine-mode {
@@ -96,25 +108,20 @@
             }
         }
     }
-}
-.switch-mode-overlay {
-    background: #f8f8f8;
-    border-radius: 4px;
-    box-shadow: 0px 2px 4px rgba(133, 137, 158, 0.2);
 
-    :global {
-        .ant-dropdown-menu {
-            border-radius: 4px;
-            padding: 8px 4px;
-            box-shadow: unset;
-            background-color: #f8f8f8;
-        }
+    .yakit-loading-mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
     }
 }
-
+// 加载图标动画
 @-webkit-keyframes building-blocks {
     from {
-        height: 96;
+        height: 160px;
     }
     to {
         height: 0px;
@@ -122,24 +129,30 @@
 }
 @keyframes building-blocks {
     from {
-        height: 96px;
+        height: 160px;
     }
     to {
         height: 0px;
     }
 }
 
+// 弹窗是否置顶
+.modal-top-wrapper {
+    z-index: 999 !important;
+}
+// 弹窗隐藏
+.modal-hidden-wrapper {
+    display: none;
+}
+
 .yaklang-update-modal {
     width: 448px;
-    z-index: 999;
+    z-index: 99;
 }
 .engine-hint-modal-wrapper {
     position: absolute;
     top: 35%;
     left: calc(50% - 224px);
-}
-.engine-hint-modal-hidden-wrapper {
-    display: none;
 }
 .modal-yaklang-engine-hint {
     box-sizing: border-box;
@@ -171,6 +184,15 @@
             .hint-icon {
                 width: 32px;
                 height: 32px;
+            }
+            .qs-icon {
+                width: 20px;
+                height: 20px;
+                color: var(--yakit-body-text-color);
+                cursor: pointer;
+            }
+            .qs-icon:hover {
+                color: var(--yakit-primary-color);
             }
         }
 
@@ -214,7 +236,395 @@
                         }
                     }
                 }
+                .download-btn {
+                    margin-top: 24px;
+                    display: flex;
+                    justify-content: right;
+                }
             }
+
+            .hint-right-content {
+                margin-top: 8px;
+                font-size: 14px;
+                line-height: 20px;
+                color: var(--yakit-body-text-color);
+            }
+            .hint-right-macarm {
+                margin-top: 8px;
+                box-sizing: border-box;
+                padding: 12px;
+                background: var(--yakit-neutral10-color);
+                border: 1px solid var(--yakit-border-color);
+                border-radius: 4px;
+                .mac-arm-hint {
+                    font-size: 12px;
+                    line-height: 16px;
+                    color: var(--yakit-header-color);
+                }
+                .mac-arm-command {
+                    margin-top: 8px;
+                    display: flex;
+                    align-items: center;
+                    height: 20px;
+                    padding: 4px 6px;
+                    background: var(--yakit-primary-background-color);
+                    border: 1px solid var(--yakit-primary-border-color);
+                    border-radius: 4px;
+
+                    font-size: 11px;
+                    color: var(--yakit-primary-color);
+                    .copy-icon {
+                        width: 12px;
+                        height: 12px;
+                        display: flex;
+                        margin-left: 8px;
+                        cursor: pointer;
+                    }
+                }
+            }
+            // 后续看看能不能整合成全局动画
+            .agr-shake-animation {
+                -webkit-animation-name: shake;
+                animation-name: shake;
+                -webkit-animation-iteration-count: 1;
+                animation-iteration-count: 1;
+                -webkit-animation-duration: 1s;
+                animation-duration: 1s;
+                -webkit-animation-fill-mode: both;
+                animation-fill-mode: both;
+                -webkit-animation-timing-function: ease;
+                animation-timing-function: ease;
+            }
+
+            @-webkit-keyframes shake {
+                0%,
+                100% {
+                    -webkit-transform: translateX(0);
+                }
+
+                10%,
+                30%,
+                50%,
+                70%,
+                90% {
+                    -webkit-transform: translateX(-5px);
+                }
+
+                20%,
+                40%,
+                60%,
+                80% {
+                    -webkit-transform: translateX(5px);
+                }
+            }
+
+            @keyframes shake {
+                0%,
+                100% {
+                    transform: translateX(0);
+                }
+
+                10%,
+                30%,
+                50%,
+                70%,
+                90% {
+                    transform: translateX(-5px);
+                }
+
+                20%,
+                40%,
+                60%,
+                80% {
+                    transform: translateX(5px);
+                }
+            }
+            .hint-right-agreement {
+                margin-top: 8px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 12px;
+                color: var(--yakit-header-color);
+                .agreement-checkbox {
+                    :global {
+                        .ant-checkbox-inner {
+                            border: 1px solid var(--yakit-helper-text-color);
+                            border-radius: 4px;
+                        }
+                        .ant-checkbox-checked .ant-checkbox-inner {
+                            background-color: var(--yakit-primary-color);
+                            border-color: var(--yakit-primary-color);
+                        }
+                        .ant-checkbox-checked::after {
+                            border: 0px;
+                        }
+                    }
+                }
+                .agreement-danger-checkbox {
+                    :global {
+                        .ant-checkbox-inner {
+                            border: 1px solid var(--yakit-danger-color);
+                            border-radius: 4px;
+                        }
+                        .ant-checkbox-checked::after {
+                            border: 0px;
+                        }
+                    }
+                }
+
+                .agreement-style {
+                    color: var(--yakit-primary-color);
+                    cursor: pointer;
+                }
+            }
+            .hint-right-btn {
+                margin-top: 24px;
+                display: flex;
+                justify-content: space-between;
+
+                .btn-group-wrapper {
+                    display: flex;
+                    gap: 8px;
+                }
+            }
+        }
+    }
+}
+
+.yakit-agr-modal {
+    width: 624px;
+    left: calc(50% - 312px);
+}
+.yaklang-qs-modal {
+    width: 697px;
+    left: calc(50% - 348px);
+}
+.agr-and-qs-modal-wrapper {
+    z-index: 99;
+    position: absolute;
+    top: 30%;
+}
+.yakit-agr-and-qs-modal {
+    width: 100%;
+    background: var(--yakit-neutral10-color);
+    border: 1px solid var(--yakit-border-color);
+    box-shadow: 0px 6px 20px rgba(204, 210, 222, 0.3);
+    border-radius: 4px;
+
+    .modal-header {
+        box-sizing: border-box;
+        height: 36px;
+        display: flex;
+        align-items: center;
+
+        background: var(--yakit-card-background-color);
+        border-bottom: 1px solid var(--yakit-border-color);
+        border-radius: 4px 4px 0px 0px;
+
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--yakit-header-color);
+    }
+    .mac-header {
+        gap: 12px;
+        .close-wrapper {
+            width: 36px;
+            height: 36px;
+            padding: 10px;
+            display: flex;
+            cursor: pointer;
+            .close-btn {
+                padding: 2px;
+                .btn-icon {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    background-color: var(--yakit-danger-color);
+                }
+            }
+        }
+    }
+    .win-header {
+        justify-content: space-between;
+        .header-title {
+            margin-left: 12px;
+        }
+        .close-wrapper {
+            width: 36px;
+            height: 36px;
+            padding: 8px;
+            .icon-style {
+                color: var(--yakit-helper-text-color);
+            }
+        }
+        .close-wrapper:hover {
+            .icon-style {
+                color: var(--yakit-primary-color);
+            }
+        }
+    }
+
+    .agreement-content-modal-wrapper {
+        .modal-body {
+            padding: 16px 24px 24px 24px;
+            .body-title {
+                height: 24px;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 24px;
+                color: var(--yakit-header-color);
+            }
+            .body-content {
+                margin-top: 8px;
+                font-size: 14px;
+                line-height: 24px;
+                text-align: justify;
+                color: var(--yakit-body-text-color);
+                .sign-content {
+                    color: var(--yakit-danger-color);
+                }
+                .underline-content {
+                    color: var(--yakit-danger-color);
+                    text-decoration: underline;
+                }
+                .sign-bold-content {
+                    color: var(--yakit-danger-color);
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+
+    .question-modal-wrapper {
+        .modal-body {
+            padding: 16px 24px 24px 24px;
+            .body-hint {
+                font-size: 14px;
+                line-height: 24px;
+                text-align: justify;
+                color: var(--yakit-body-text-color);
+                .hint-sign {
+                    color: var(--yakit-danger-color);
+                }
+            }
+            .body-link {
+                margin-top: 8px;
+                box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 12px;
+                gap: 12px;
+                border: 1px solid var(--yakit-border-color);
+                border-radius: 4px;
+                .link-opt {
+                    display: flex;
+                    align-items: center;
+                    .link-title {
+                        font-size: 12px;
+                        text-align: justify;
+                        text-align-last: justify;
+                        color: var(--yakit-header-color);
+                    }
+
+                    .link-style {
+                        margin-left: 8px;
+                        flex: 1;
+                        padding: 4px 6px;
+                        background: var(--yakit-card-background-color);
+                        border: 1px solid var(--yakit-border-color);
+                        border-radius: 4px;
+                        font-size: 11px;
+                        line-height: 12px;
+                        color: var(--yakit-body-text-color);
+                        word-break: break-all;
+                        .copy-icon {
+                            margin-left: 8px;
+                            display: inline-block;
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.switch-engine-mode-wrapper {
+    .body-header {
+        height: 40px;
+        padding: 18px 24px 2px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .header-title {
+            height: 20;
+            line-height: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--yakit-header-color);
+        }
+        .header-close {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            color: var(--yakit-helper-text-color);
+            cursor: pointer;
+            .close-icon {
+                svg {
+                    width: 16px;
+                    height: 16px;
+                }
+            }
+        }
+        .header-close:hover {
+            color: var(--yakit-primary-color);
+        }
+    }
+    .body-current-mode {
+        margin-top: 8px;
+        padding: 8px 24px;
+        height: 32px;
+        line-height: 16px;
+        background: var(--yakit-primary-background-color);
+        font-size: 12px;
+        color: var(--yakit-primary-color);
+    }
+    .body-mode-list {
+        padding: 16px 24px 24px 24px;
+        .list-opt {
+            padding: 0 16px;
+            display: flex;
+            gap: 16px;
+            border-radius: 4px;
+            background: var(--yakit-neutral10-color);
+            cursor: pointer;
+            .opt-img {
+                width: 80px;
+                height: 80px;
+            }
+            .opt-mode {
+                padding: 18px 0;
+                .mode-title {
+                    height: 20px;
+                    font-weight: 600;
+                    font-size: 14px;
+                    line-height: 20px;
+                    color: var(--yakit-header-color);
+                }
+                .mode-content {
+                    margin-top: 8px;
+                    height: 16px;
+                    font-size: 12px;
+                    line-height: 16px;
+                    color: var(--yakit-helper-text-color);
+                }
+            }
+        }
+        .list-opt:hover {
+            background: var(--yakit-card-background-color);
         }
     }
 }

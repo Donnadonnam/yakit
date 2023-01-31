@@ -63,4 +63,8 @@ module.exports = (win, getClient) => {
     ipcMain.handle("update-yaklang-reconnect", (e, version) => {
         win.webContents.send("update-yaklang-reconnect-callback", version)
     })
+    /** 连接引擎的指令 */
+    ipcMain.handle("engine-ready-link", () => {
+        win.webContents.send("engine-ready-link-callback")
+    })
 }
