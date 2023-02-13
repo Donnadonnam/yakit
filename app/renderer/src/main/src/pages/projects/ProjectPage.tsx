@@ -24,7 +24,7 @@ export interface ProjectDescription {
     DatabasePath: string
 }
 
-interface ProjectsResponse {
+export interface ProjectsResponse {
     Pagination: { Page: number, Limit: number },
     Projects: ProjectDescription[],
     Total: number
@@ -100,7 +100,7 @@ export const ProjectPage: React.FC<ProjectPageProp> = (props) => {
     }
 
     return <AutoCard bordered={false} title={<Space>
-        项目管理
+        项目管理（Beta）
         {isDefault && <Tag color={"green"}>默认数据库</Tag>}
         {current && <div>{current?.DatabasePath}</div>}
     </Space>} size={"small"} extra={<div>
@@ -251,7 +251,7 @@ interface ExportProjectProp {
     onClose: () => any
 }
 
-interface ProjectIOProgress {
+export interface ProjectIOProgress {
     TargetPath: string
     Percent: number
     Verbose: string
